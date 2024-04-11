@@ -13,7 +13,11 @@
 	<div class="container flex h-[75px] items-center justify-between">
 		<img class="w-[200px] object-contain" src={LogoPrimdev} alt="Logo Primakara Developers" />
 
-		<Button variant="default">
+		<Button
+			href="https://github.com/Adisudirta/Primdev-Certificate-Ethereum-IPFS"
+			target="_blank"
+			variant="default"
+		>
 			<Github class="mr-1" />
 
 			<span>Contribute</span>
