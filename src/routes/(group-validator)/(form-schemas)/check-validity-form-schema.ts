@@ -4,7 +4,6 @@ export const checkValidityFormSchema = z
 	.object({
 		code: z.string().refine(
 			(value) => {
-				console.log(value.length);
 				return !(value.length < 6);
 			},
 			{

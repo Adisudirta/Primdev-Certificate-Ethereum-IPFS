@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { zod } from 'sveltekit-superforms/adapters';
 	import { superForm, defaults } from 'sveltekit-superforms';
-	import { checkValidityFormSchema } from './check-validity-form-schema';
+	import { checkValidityFormSchema } from '../(form-schemas)/check-validity-form-schema';
 
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';

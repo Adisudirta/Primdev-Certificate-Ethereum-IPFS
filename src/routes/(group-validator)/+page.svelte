@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CheckValidityForm from './Components/check-validity-form.svelte';
+	import CheckValidityForm from './(components)/check-validity-form.svelte';
 </script>
 
 <section class="gradient-corner container h-full pt-20">
