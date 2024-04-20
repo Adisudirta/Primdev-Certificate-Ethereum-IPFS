@@ -37,6 +37,7 @@ export function MetaMaskStore() {
 	const init = async () => {
 		// if metamask is not present, do nothing
 		if (!getMetaMaskPresent()) {
+			loaded.set(true);
 			return;
 		}
 
@@ -59,10 +60,12 @@ export function MetaMaskStore() {
 		}
 
 		// if metamask is present, but not connected previously, we will wait for the user to click connect. For now, we will just set loaded to true
-		setTimeout(() => {
+		const delayTimeOut = setTimeout(() => {
 			// delay to allow a flashing screen and layout shift
 			loaded.set(true);
 		}, 500);
+
+		clearInterval(delayTimeOut);
 
 		// any time the wallet state changes, we will update local storage
 		walletState.subscribe((state) => {

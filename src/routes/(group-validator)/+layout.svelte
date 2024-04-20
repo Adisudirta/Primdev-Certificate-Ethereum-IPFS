@@ -3,7 +3,6 @@
 </script>
 
 <Header />
-
 <div class="w-full pt-[75px]">
 	<slot />
 </div>
