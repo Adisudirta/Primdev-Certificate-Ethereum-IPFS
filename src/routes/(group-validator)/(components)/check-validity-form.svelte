@@ -15,7 +15,7 @@
 	const form = superForm(defaults(initialValueCheckValidityForm, zod(checkValidityFormSchema)), {
 		SPA: true,
 		validators: zod(checkValidityFormSchema),
-		validationMethod: 'oninput'
+		validationMethod: 'auto'
 	});
 
 	const { form: formData, validateForm, allErrors } = form;

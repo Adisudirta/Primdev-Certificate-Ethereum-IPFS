@@ -20,7 +20,7 @@
 	const form = superForm(defaults(initialValueLoginForm, zod(loginFormSchema)), {
 		SPA: true,
 		validators: zod(loginFormSchema),
-		validationMethod: 'oninput'
+		validationMethod: 'auto'
 	});
 
 	const { form: formData, validateForm, allErrors } = form;
