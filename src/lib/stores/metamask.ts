@@ -39,6 +39,8 @@ export function MetaMaskStore() {
 		if (!getMetaMaskPresent()) {
 			loaded.set(true);
 			return;
+		} else {
+			loaded.set(true);
 		}
 
 		// if we have an account in local storage, we can assume the user left the page with metamask connected last time

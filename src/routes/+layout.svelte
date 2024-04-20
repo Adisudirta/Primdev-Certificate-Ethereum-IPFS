@@ -8,13 +8,18 @@
 	import MetamaskProvider from '$lib/components/metamask-provider.svelte';
 
 	import '../app.pcss';
+	import { goto } from '$app/navigation';
 
 	initializeApp(firebaseConfig);
 	const auth = getAuth();
 
 	onAuthStateChanged(auth, (userData) => {
-		user.set(userData);
+		if (userData) {
+			user.set(userData);
+		}
 	});
+
+	$: $user && goto('/dashboard');
 
 	const { walletState } = MetaMaskStore();
 </script>

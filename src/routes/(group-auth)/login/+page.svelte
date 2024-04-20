@@ -11,6 +11,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { user } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
+	import { FirebaseError } from 'firebase/app';
 
 	const initialValueLoginForm = {
 		email: '',
@@ -23,7 +24,7 @@
 		validationMethod: 'auto'
 	});
 
-	const { form: formData, validateForm, allErrors } = form;
+	const { form: formData, validateForm, allErrors, errors } = form;
 
 	let isLoading = false;
 	async function handleLogin() {
@@ -38,9 +39,23 @@
 			})
 			.catch((error) => {
 				isLoading = false;
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				console.error(errorCode, errorMessage);
+
+				if (error instanceof FirebaseError) {
+					const errorMessage = error.message;
+
+					console.log(error.code);
+					switch (error.code) {
+						case 'auth/invalid-credential':
+							$errors.email = ['Invalid credential!'];
+							$errors.password = ['Invalid Credential!'];
+							break;
+						case 'auth/too-many-requests':
+							$errors.password = ['Too many requests!'];
+							break;
+						default:
+							$errors.password = [errorMessage];
+					}
+				}
 			});
 	}
 </script>
