@@ -6,8 +6,8 @@
 
 <div class="w-ful container flex h-screen items-center justify-between">
 	<div class="flex flex-col space-y-5">
-		<h1 class="text-5xl font-bold text-gray-800">Looks like you doesn't have Metamask installed</h1>
-		<p class="text-2xl text-gray-800">
+		<h1 class="text-5xl font-bold text-primary">Looks like you doesn't have Metamask installed</h1>
+		<p class="text-xl text-gray-500">
 			Sorry about that! Please install Metamask and you can come back here.
 		</p>
 
