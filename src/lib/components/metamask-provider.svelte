@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { MetaMaskStore } from '$lib/stores/metamask';
+	import { metamask } from '$lib/stores/metamask';
 	import { onMount } from 'svelte';
 
 	import Loading from './loading.svelte';
 	import InstallMetamask from './install-metamask.svelte';
 
-	const { walletState, isMetaMaskPresent, connect, loaded, init } = MetaMaskStore();
+	const { walletState, isMetaMaskPresent, connect, loaded, init } = metamask();
 
 	onMount(() => {
 		init();

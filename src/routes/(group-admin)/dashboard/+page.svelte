@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MetaMaskStore } from '$lib/stores/metamask';
+	import { metamask } from '$lib/stores/metamask';
 	import { user } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
 	import { env } from '$env/dynamic/public';
@@ -9,7 +9,7 @@
 
 	import { onMount } from 'svelte';
 
-	const { connect, isMetaMaskPresent } = MetaMaskStore();
+	const { connect, isMetaMaskPresent } = metamask();
 
 	$: !$user && goto('/login');
 

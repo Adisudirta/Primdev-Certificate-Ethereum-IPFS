@@ -14,7 +14,7 @@ const getLocalStorageState = () => {
 	return JSON.parse(localStorage.getItem(localStorageKey.WALLET_STATE) || '{}');
 };
 
-export function MetaMaskStore() {
+export function metamask() {
 	const loaded = writable(false);
 	const isMetaMaskPresent = writable(getMetaMaskPresent());
 	const walletState = writable(getLocalStorageState());

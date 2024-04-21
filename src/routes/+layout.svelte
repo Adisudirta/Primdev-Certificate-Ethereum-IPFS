@@ -3,7 +3,7 @@
 	import { getAuth, onAuthStateChanged } from 'firebase/auth';
 	import { initializeApp } from 'firebase/app';
 	import { firebaseConfig } from '../config.firebase';
-	import { MetaMaskStore } from '$lib/stores/metamask';
+	import { metamask } from '$lib/stores/metamask';
 
 	import MetamaskProvider from '$lib/components/metamask-provider.svelte';
 
@@ -21,7 +21,7 @@
 
 	$: $user && goto('/dashboard');
 
-	const { walletState } = MetaMaskStore();
+	const { walletState } = metamask();
 </script>
 
 <div class="gradient-corner">
