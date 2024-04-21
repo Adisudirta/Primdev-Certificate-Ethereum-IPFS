@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { metamask } from '$lib/stores/metamask';
 	import { user } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
-
-	import { Button } from '$lib/components/ui/button';
-
 	import { onMount } from 'svelte';
+
 	import { IPFSRepository } from '$lib/api/repositories/ipfs-repository';
 
-	const { connect, isMetaMaskPresent } = metamask();
+	import { Button } from '$lib/components/ui/button';
+	import { Input } from '$lib/components/ui/input/index.js';
+	import { Separator } from '$lib/components/ui/separator';
+	import NoEventYet from './(components)/no-event-yet.svelte';
 
 	$: !$user && goto('/login');
 
@@ -21,9 +21,18 @@
 </script>
 
 <section class="container">
-	<h1 class="mb-10 mt-20 text-3xl font-bold text-primary">Dashboard Admin</h1>
+	<h1 class="mb-4 mt-8 text-3xl font-bold text-primary">Dashboard Admin</h1>
+	<p class="font-semibold text-gray-500">
+		Wellcome Primakara Developer Admin, now you can add & manage certificate here.
+	</p>
 
-	{#if !$isMetaMaskPresent}
-		<Button on:click={async () => await connect()}>Connect Metamask</Button>
-	{/if}
+	<div class="mb-4 mt-10 flex items-center justify-between">
+		<Input type="search" placeholder="Search Event" class="max-w-xs" />
+
+		<Button>Add Event</Button>
+	</div>
+
+	<Separator class="mb-5 h-[1px] w-full bg-gray-300" />
+
+	<NoEventYet />
 </section>
