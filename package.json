@@ -43,6 +43,7 @@
 		"ethers": "^6.11.1",
 		"firebase": "^10.10.0",
 		"formsnap": "^1.0.0",
+		"ky": "^1.2.3",
 		"lucide-svelte": "^0.367.0",
 		"mode-watcher": "^0.3.0",
 		"svelte-radix": "^1.1.0",
