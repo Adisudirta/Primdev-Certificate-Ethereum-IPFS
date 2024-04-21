@@ -1,5 +1,7 @@
 <script lang="ts">
 	import logoPrimdevNoText from '$lib/assets/logo-primakara-developers-no-text.svg';
+
+	export let message: string = '';
 </script>
 
 <div class="flex h-screen w-full items-center justify-center">
@@ -19,4 +21,8 @@
 
 		<img src={logoPrimdevNoText} class="w-[300px] object-contain" alt="Primakara Developer Logo" />
 	</div>
+
+	{#if Boolean(message)}
+		<span class="font absolute top-[85vh] text-lg font-semibold">{message}</span>
+	{/if}
 </div>

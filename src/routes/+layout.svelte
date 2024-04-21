@@ -8,7 +8,6 @@
 	import MetamaskProvider from '$lib/components/metamask-provider.svelte';
 
 	import '../app.pcss';
-	import { goto } from '$app/navigation';
 
 	initializeApp(firebaseConfig);
 	const auth = getAuth();
@@ -18,8 +17,6 @@
 			user.set(userData);
 		}
 	});
-
-	$: $user && goto('/dashboard');
 
 	const { walletState } = metamask();
 </script>
@@ -45,7 +42,7 @@
 		top: 0;
 		left: 0;
 		width: 100%;
-		height: 100%;
+		height: 100vh;
 		z-index: -1;
 		background-position: top left;
 		background-repeat: no-repeat;

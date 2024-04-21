@@ -2,6 +2,8 @@
 	import { zod } from 'sveltekit-superforms/adapters';
 	import { superForm, defaults } from 'sveltekit-superforms';
 	import { loginFormSchema } from './(form-schemas)/login-schema';
+	import { user } from '$lib/stores/auth';
+	import { goto } from '$app/navigation';
 	import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 	import logoPrimdev from '$lib/assets/logo-primaraka-developers.svg';
@@ -9,9 +11,9 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
-	import { user } from '$lib/stores/auth';
-	import { goto } from '$app/navigation';
 	import { FirebaseError } from 'firebase/app';
+
+	$: $user && goto('/dashboard');
 
 	const initialValueLoginForm = {
 		email: '',

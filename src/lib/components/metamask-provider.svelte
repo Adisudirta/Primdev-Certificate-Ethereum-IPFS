@@ -5,7 +5,7 @@
 	import Loading from './loading.svelte';
 	import InstallMetamask from './install-metamask.svelte';
 
-	const { walletState, isMetaMaskPresent, connect, loaded, init } = metamask();
+	const { walletState, isMetaMaskPresent, loaded, init } = metamask();
 
 	onMount(() => {
 		init();
@@ -16,12 +16,10 @@
 	{#if $isMetaMaskPresent}
 		{#if Boolean($walletState.account)}
 			<slot />
-		{:else}
-			<button on:click={connect}>Connect Wallet</button>
 		{/if}
 	{:else}
 		<InstallMetamask />
 	{/if}
 {:else}
-	<Loading />
+	<Loading message="Waiting Metamask..." />
 {/if}
