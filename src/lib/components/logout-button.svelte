@@ -6,6 +6,8 @@
 </script>
 
 <Button
+	class="w-full"
+	variant="destructive"
 	on:click={() => {
 		const auth = getAuth();
 

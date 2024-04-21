@@ -2,7 +2,7 @@
 	import Header from '$lib/components/header.svelte';
 </script>
 
-<Header type="validator" />
-<div class="w-full pt-[75px]">
+<Header />
+<main class="w-full pt-[75px]">
 	<slot />
-</div>
+</main>

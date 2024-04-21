@@ -4,7 +4,6 @@
 	import { goto } from '$app/navigation';
 
 	import { Button } from '$lib/components/ui/button';
-	import LogoutButton from './(components)/logout-button.svelte';
 
 	import { onMount } from 'svelte';
 	import { IPFSRepository } from '$lib/api/repositories/ipfs-repository';
@@ -21,14 +20,10 @@
 	});
 </script>
 
-<section>
-	<div class="container">
-		<h1 class="mb-10 text-2xl">Dashboard Admin</h1>
+<section class="container">
+	<h1 class="mb-10 mt-20 text-3xl font-bold text-primary">Dashboard Admin</h1>
 
-		<LogoutButton />
-
-		{#if !$isMetaMaskPresent}
-			<Button on:click={async () => await connect()}>Connect Metamask</Button>
-		{/if}
-	</div>
+	{#if !$isMetaMaskPresent}
+		<Button on:click={async () => await connect()}>Connect Metamask</Button>
+	{/if}
 </section>
