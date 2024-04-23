@@ -7,7 +7,7 @@
 
 	const { walletState, connect } = metamask();
 
-	let loading: boolean = false;
+	let isLoading: boolean = false;
 </script>
 
 <div class="w-ful container flex h-screen items-center justify-between">
@@ -21,13 +21,13 @@
 			<Button
 				class="w-fit"
 				on:click={async () => {
-					loading = true;
+					isLoading = true;
 					await connect();
-					loading = false;
+					isLoading = false;
 				}}
-				disabled={loading}
+				disabled={isLoading}
 			>
-				{loading ? 'Connecting Metamask...' : 'Connect Metamask'}
+				{isLoading ? 'Connecting Metamask...' : 'Connect Metamask'}
 			</Button>
 		{:else}
 			<h1 class="text-5xl font-bold text-primary">

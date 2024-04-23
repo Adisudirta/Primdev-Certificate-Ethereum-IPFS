@@ -105,6 +105,7 @@
 
 				<Button
 					type="submit"
+					disabled={isLoading}
 					class="w-full bg-cyan-500 transition-colors duration-300 ease-in-out hover:bg-cyan-500/65"
 				>
 					{isLoading ? 'Loading...' : 'Login'}
