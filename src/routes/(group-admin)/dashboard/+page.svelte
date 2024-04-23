@@ -5,10 +5,10 @@
 
 	import { IPFSRepository } from '$lib/api/repositories/ipfs-repository';
 
-	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Separator } from '$lib/components/ui/separator';
 	import NoEventYet from './(components)/no-event-yet.svelte';
+	import AddCertificateForm from './(components)/add-certificate-form.svelte';
 
 	$: !$user && goto('/login');
 
@@ -29,7 +29,7 @@
 	<div class="mb-4 mt-10 flex items-center justify-between">
 		<Input type="search" placeholder="Search Event" class="max-w-xs" />
 
-		<Button>Add Event</Button>
+		<AddCertificateForm />
 	</div>
 
 	<Separator class="mb-5 h-[1px] w-full bg-gray-300" />
