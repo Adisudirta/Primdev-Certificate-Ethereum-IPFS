@@ -13,10 +13,8 @@
 </script>
 
 {#if $loaded}
-	{#if $isMetaMaskPresent}
-		{#if Boolean($walletState.account)}
-			<slot />
-		{/if}
+	{#if $isMetaMaskPresent && Boolean($walletState.account)}
+		<slot />
 	{:else}
 		<InstallMetamask />
 	{/if}
