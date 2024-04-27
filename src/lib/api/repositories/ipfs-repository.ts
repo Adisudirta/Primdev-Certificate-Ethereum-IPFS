@@ -3,12 +3,12 @@ import { env } from '$env/dynamic/public';
 import { pinataAPI } from '$lib/utils/api';
 import ky from 'ky';
 
-import type { PinJSONToIPFSRequest } from '../models/requests/IPFS-request';
 import type {
 	ListFilesResponse,
 	PinJSONToIPFSResponse,
 	TestAuthenticationResponse
-} from '../models/responses/IPFS-response';
+} from '../models/IPFS';
+import { certificateMetadata } from '$lib/constants/certificate';
 
 export class IPFSRepository {
 	static async testAuthentication(): Promise<TestAuthenticationResponse> {
@@ -16,11 +16,17 @@ export class IPFSRepository {
 		return res.json();
 	}
 
-	static async pinJSONToIPFS<T>(
-		requestBody: PinJSONToIPFSRequest<T>
-	): Promise<PinJSONToIPFSResponse> {
+	static async pinJSONToIPFS<T>(requestBody: T): Promise<PinJSONToIPFSResponse> {
 		const res = await pinataAPI.post('pinning/pinJSONToIPFS', {
-			json: requestBody
+			json: {
+				pinataOptions: {
+					cidVersion: 1
+				},
+				pinataMetadata: {
+					name: certificateMetadata.FILE_NAME
+				},
+				pinataContent: requestBody
+			}
 		});
 		return res.json();
 	}

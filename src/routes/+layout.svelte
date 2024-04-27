@@ -8,9 +8,13 @@
 	import MetamaskProvider from '$lib/components/metamask-provider.svelte';
 
 	import '../app.pcss';
+	// import { onMount } from 'svelte';
+	// import { CertificateService } from '$lib/api/services/certificate-service';
+	// import { IPFSRepository } from '$lib/api/repositories/ipfs-repository';
 
 	initializeApp(firebaseConfig);
 	const auth = getAuth();
+	const { walletState } = metamask();
 
 	onAuthStateChanged(auth, (userData) => {
 		if (userData) {
@@ -18,7 +22,10 @@
 		}
 	});
 
-	const { walletState } = metamask();
+	// onMount(async () => {
+	// 	await CertificateService.initCertificateOnIPFS();
+	// 	await CertificateService.getLatestUpdatedCertificate();
+	// });
 </script>
 
 <div class="gradient-corner">

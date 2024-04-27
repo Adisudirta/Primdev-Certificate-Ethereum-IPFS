@@ -17,6 +17,7 @@ export interface ListFilesResponse {
 		user_id: string;
 		date_pinned: string;
 		date_unpinned: string;
+		mime_type: string;
 		metadata: {
 			name: string;
 			keyvalues: string;

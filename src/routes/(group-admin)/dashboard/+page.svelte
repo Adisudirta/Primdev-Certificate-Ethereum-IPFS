@@ -3,20 +3,24 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 
-	import { IPFSRepository } from '$lib/api/repositories/ipfs-repository';
-
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Separator } from '$lib/components/ui/separator';
 	import NoEventYet from './(components)/no-event-yet.svelte';
 	import AddCertificateForm from './(components)/add-certificate-form.svelte';
+	import { CertificateService } from '$lib/api/services/certificate-service';
 
 	$: !$user && goto('/login');
 
 	onMount(async () => {
-		const res = await IPFSRepository.retrieveJSONFromIPFS(
-			'bafkreicjmxc2drbgxtoidx6xfatbffyx46oiyo6ktipss6dhdermwtsoze'
-		);
-		console.log(res);
+		const latestCertificates = await CertificateService.getLatestUpdatedCertificate();
+		console.log('latest certificate:', latestCertificates);
+		if (!latestCertificates) {
+			await CertificateService.updateCertificateIPFS({
+				certificates: []
+			});
+			const latestCertificates = await CertificateService.getLatestUpdatedCertificate();
+			console.log('latest certificate', latestCertificates);
+		}
 	});
 </script>
 
