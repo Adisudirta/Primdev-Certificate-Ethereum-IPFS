@@ -1,25 +1,17 @@
 <script lang="ts">
 	import { user } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Separator } from '$lib/components/ui/separator';
-	import NoEventYet from './(components)/no-event-yet.svelte';
 	import AddCertificateForm from './(components)/add-certificate-form.svelte';
-	import { CertificateService } from '$lib/api/services/certificate-service';
+	import CertificateEventTable from './(components)/certificate-event-table.svelte';
+
+	export let data;
+
+	console.log(data);
 
 	$: !$user && goto('/login');
-
-	onMount(async () => {
-		// Check if the latest certificate is empty, then fill it with empty array
-		const latestCertificates = await CertificateService.getLatestUpdatedCertificateData();
-		if (!latestCertificates) {
-			await CertificateService.updateCertificateIPFS({
-				certificates: []
-			});
-		}
-	});
 </script>
 
 <section class="container">
@@ -36,5 +28,5 @@
 
 	<Separator class="mb-5 h-[1px] w-full bg-gray-300" />
 
-	<NoEventYet />
+	<CertificateEventTable />
 </section>
