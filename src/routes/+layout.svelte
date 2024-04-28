@@ -3,29 +3,20 @@
 	import { getAuth, onAuthStateChanged } from 'firebase/auth';
 	import { initializeApp } from 'firebase/app';
 	import { firebaseConfig } from '../config.firebase';
-	import { metamask } from '$lib/stores/metamask';
 
 	import MetamaskProvider from '$lib/components/metamask-provider.svelte';
 
 	import '../app.pcss';
-	// import { onMount } from 'svelte';
-	// import { CertificateService } from '$lib/api/services/certificate-service';
-	// import { IPFSRepository } from '$lib/api/repositories/ipfs-repository';
+	import Footer from '$lib/components/footer.svelte';
 
 	initializeApp(firebaseConfig);
 	const auth = getAuth();
-	const { walletState } = metamask();
 
 	onAuthStateChanged(auth, (userData) => {
 		if (userData) {
 			user.set(userData);
 		}
 	});
-
-	// onMount(async () => {
-	// 	await CertificateService.initCertificateOnIPFS();
-	// 	await CertificateService.getLatestUpdatedCertificate();
-	// });
 </script>
 
 <div class="gradient-corner">
@@ -34,11 +25,7 @@
 			<slot />
 		</div>
 
-		<footer class="flex h-10 w-full items-center justify-center">
-			{#if Boolean($walletState.account)}
-				<span>{$walletState.account}</span>
-			{/if}
-		</footer>
+		<Footer />
 	</MetamaskProvider>
 </div>
 

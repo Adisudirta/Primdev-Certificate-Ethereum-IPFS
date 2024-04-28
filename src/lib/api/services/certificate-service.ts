@@ -22,6 +22,23 @@ export class CertificateService {
 		console.log('updateCertificateIPFS:', res);
 	}
 
+	static async getLatestCertificateCID(): Promise<string | null> {
+		const listFiles = await IPFSRepository.listFiles();
+
+		const certificateHash = listFiles.rows.find(
+			(file) =>
+				file.date_unpinned === null &&
+				file.mime_type === 'application/json' &&
+				file.metadata.name.split('.')[0] === certificateMetadata.FILE_NAME
+		);
+
+		if (!certificateHash) {
+			return null;
+		}
+
+		return certificateHash.ipfs_pin_hash;
+	}
+
 	static async getLatestUpdatedCertificate(): Promise<CertificateList | null> {
 		const listFiles = await IPFSRepository.listFiles();
 
