@@ -21,6 +21,7 @@
 	import { Button, buttonVariants } from '$lib/components/ui/button';
 	import { CertificateService } from '$lib/api/services/certificate-service';
 	import type { Certificate } from '$lib/api/models/certificate';
+	import { invalidateAll } from '$app/navigation';
 
 	let isLoading = false;
 
@@ -87,6 +88,7 @@
 					eventCode: $formData.eventCode,
 					expired: $formData.expired
 				});
+				await invalidateAll();
 				form.reset();
 			}
 		}}

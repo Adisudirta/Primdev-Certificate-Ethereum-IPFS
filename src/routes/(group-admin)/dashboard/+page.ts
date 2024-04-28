@@ -12,6 +12,6 @@ export const load: PageLoad = async () => {
 
 	const certificateEvents = await CertificateService.getLatestUpdatedCertificateData();
 	return {
-		certificateEvents
+		certificateEvents: certificateEvents
 	};
 };
