@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { zod } from 'sveltekit-superforms/adapters';
-	import moment from 'moment';
 	import { cn } from '$lib/utils/ui';
 	import { defaults, superForm } from 'sveltekit-superforms';
 	import { addCertificateFormSchema } from '../(form-schemas)/add-certificate-scehma';
@@ -20,6 +19,8 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { Button, buttonVariants } from '$lib/components/ui/button';
+	import { CertificateService } from '$lib/api/services/certificate-service';
+	import type { Certificate } from '$lib/api/models/certificate';
 
 	let isLoading = false;
 
@@ -35,7 +36,7 @@
 		validationMethod: 'auto'
 	});
 
-	const { form: formData, validateForm, allErrors } = form;
+	const { form: formData, validateForm, allErrors, errors } = form;
 
 	const df = new DateFormatter('en-US', {
 		dateStyle: 'long'
@@ -43,6 +44,34 @@
 	let value: DateValue | undefined;
 	$: value = $formData.expired ? parseDate($formData.expired) : undefined;
 	let placeholder: DateValue = today(getLocalTimeZone());
+
+	async function createCertificateEvent(certificateEvent: Certificate) {
+		isLoading = true;
+		const currentCertificateData = await CertificateService.getLatestUpdatedCertificateData();
+
+		// Check if event code already exist
+		if (
+			currentCertificateData?.certificates.some(
+				(certificate) => certificate.eventCode === certificateEvent.eventCode
+			)
+		) {
+			$errors.eventCode = ['Event code already exist'];
+			isLoading = false;
+			return;
+		}
+
+		const newCertificateEventData: Certificate = {
+			status: certificateEvent.status,
+			eventCode: certificateEvent.eventCode,
+			eventName: certificateEvent.eventName,
+			expired: certificateEvent.expired,
+			participants: []
+		};
+
+		currentCertificateData?.certificates.push(newCertificateEventData);
+		await CertificateService.updateCertificateIPFS(currentCertificateData!);
+		isLoading = false;
+	}
 </script>
 
 <FormDialog triggerText="Add Event" title="Add Certificate Event">
@@ -51,8 +80,14 @@
 			e.preventDefault();
 			await validateForm({ update: true });
 
-			if ($formData.expired) {
-				console.log(moment($formData.expired).unix());
+			if ($allErrors.length === 0) {
+				await createCertificateEvent({
+					status: 'AVAILABLE',
+					eventName: $formData.eventName,
+					eventCode: $formData.eventCode,
+					expired: $formData.expired
+				});
+				form.reset();
 			}
 		}}
 		class="flex flex-col space-y-4"

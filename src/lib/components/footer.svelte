@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { env } from '$env/dynamic/public';
 	import { CertificateService } from '$lib/api/services/certificate-service';
 </script>
 
@@ -10,7 +9,7 @@
 		{:then cid}
 			{#if cid}
 				<a
-					href={`${env.PUBLIC_PINATA_GATEWAY}${cid}`}
+					href={`https://ipfs.io/ipfs/${cid}?filename=${cid}`}
 					target="_blank"
 					rel="noopener noreferrer"
 					class="text-sm text-gray-500"

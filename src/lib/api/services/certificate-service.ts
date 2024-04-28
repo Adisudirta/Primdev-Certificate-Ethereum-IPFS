@@ -18,8 +18,7 @@ export class CertificateService {
 			});
 		}
 
-		const res = await IPFSRepository.pinJSONToIPFS<CertificateList>(content);
-		console.log('updateCertificateIPFS:', res);
+		await IPFSRepository.pinJSONToIPFS<CertificateList>(content);
 	}
 
 	static async getLatestCertificateCID(): Promise<string | null> {
@@ -39,7 +38,7 @@ export class CertificateService {
 		return certificateHash.ipfs_pin_hash;
 	}
 
-	static async getLatestUpdatedCertificate(): Promise<CertificateList | null> {
+	static async getLatestUpdatedCertificateData(): Promise<CertificateList | null> {
 		const listFiles = await IPFSRepository.listFiles();
 
 		const certificateHash = listFiles.rows.find(

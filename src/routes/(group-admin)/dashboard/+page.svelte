@@ -12,14 +12,12 @@
 	$: !$user && goto('/login');
 
 	onMount(async () => {
-		const latestCertificates = await CertificateService.getLatestUpdatedCertificate();
-		console.log('latest certificate:', latestCertificates);
+		// Check if the latest certificate is empty, then fill it with empty array
+		const latestCertificates = await CertificateService.getLatestUpdatedCertificateData();
 		if (!latestCertificates) {
 			await CertificateService.updateCertificateIPFS({
 				certificates: []
 			});
-			const latestCertificates = await CertificateService.getLatestUpdatedCertificate();
-			console.log('latest certificate', latestCertificates);
 		}
 	});
 </script>
