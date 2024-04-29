@@ -1,12 +1,16 @@
 <script lang="ts">
 	import type { Certificate } from '$lib/api/models/certificate';
+
 	import moment from 'moment';
 	import { writable } from 'svelte/store';
-	import { createRender, createTable, Render, Subscribe } from 'svelte-headless-table';
-	import { Input } from '$lib/components/ui/input/index.js';
+
 	import * as Table from '$lib/components/ui/table';
+	import { createRender, createTable, Render, Subscribe } from 'svelte-headless-table';
+	import { addPagination } from 'svelte-headless-table/plugins';
+	import { Input } from '$lib/components/ui/input/index.js';
 	import ActionButton from '$lib/components/action-button.svelte';
 	import DataNotFound from './data-not-found.svelte';
+	import { Button } from '$lib/components/ui/button';
 
 	export let certificateEventData: Certificate[] | [];
 
@@ -21,7 +25,9 @@
 			)
 		: certificateEventWritable.set(certificateEventData);
 
-	const table = createTable(certificateEventWritable);
+	const table = createTable(certificateEventWritable, {
+		page: addPagination()
+	});
 
 	const columns = table.createColumns([
 		table.column({
@@ -62,7 +68,9 @@
 		})
 	]);
 
-	const { headerRows, pageRows, tableAttrs, tableBodyAttrs } = table.createViewModel(columns);
+	const { headerRows, pageRows, tableAttrs, tableBodyAttrs, pluginStates } =
+		table.createViewModel(columns);
+	const { hasNextPage, hasPreviousPage, pageIndex } = pluginStates.page;
 </script>
 
 <div class="relative">
@@ -109,6 +117,21 @@
 					{/each}
 				</Table.Body>
 			</Table.Root>
+		</div>
+
+		<div class="flex items-center justify-end space-x-2 py-4">
+			<Button
+				variant="outline"
+				size="sm"
+				on:click={() => ($pageIndex = $pageIndex - 1)}
+				disabled={!$hasPreviousPage}>Previous</Button
+			>
+			<Button
+				variant="outline"
+				size="sm"
+				disabled={!$hasNextPage}
+				on:click={() => ($pageIndex = $pageIndex + 1)}>Next</Button
+			>
 		</div>
 	{:else}
 		<DataNotFound />

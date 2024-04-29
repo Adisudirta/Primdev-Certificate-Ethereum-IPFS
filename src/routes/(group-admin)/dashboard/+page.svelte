@@ -24,5 +24,7 @@
 
 	<Separator class="mb-5 h-[1px] w-full bg-gray-300" />
 
-	<CertificateEventTable certificateEventData={certificateEvents} />
+	{#key certificateEvents}
+		<CertificateEventTable certificateEventData={certificateEvents} />
+	{/key}
 </section>
