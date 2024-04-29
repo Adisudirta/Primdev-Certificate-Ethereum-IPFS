@@ -43,7 +43,7 @@
 		table.column({
 			id: 'expired',
 			accessor: ({ expired }) => expired,
-			header: 'Amount',
+			header: 'Expired',
 			cell: ({ value }) => {
 				return value ? moment(value).format('DD MMMM YYYY') : 'No Expired Date';
 			}

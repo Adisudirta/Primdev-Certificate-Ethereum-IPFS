@@ -1,14 +1,13 @@
 <script lang="ts">
 	import * as Dialog from './ui/dialog/index.js';
-	import { buttonVariants } from './ui/button/index.js';
 
-	export let triggerText: string;
 	export let title: string;
 	export let description: string = '';
+	export let open: boolean | undefined = false;
 </script>
 
-<Dialog.Root>
-	<Dialog.Trigger class={buttonVariants({ variant: 'default' })}>{triggerText}</Dialog.Trigger>
+<Dialog.Root bind:open>
+	<slot name="trigger" />
 
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
@@ -21,6 +20,6 @@
 			{/if}
 		</Dialog.Header>
 
-		<slot />
+		<slot name="content" />
 	</Dialog.Content>
 </Dialog.Root>

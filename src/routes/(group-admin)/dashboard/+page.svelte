@@ -7,6 +7,7 @@
 	import CertificateEventTable from './(components)/certificate-event-table.svelte';
 
 	export let data;
+	$: certificateEvents = data.certificateEvents?.certificates ?? [];
 
 	$: !$user && goto('/login');
 </script>
@@ -23,5 +24,5 @@
 
 	<Separator class="mb-5 h-[1px] w-full bg-gray-300" />
 
-	<CertificateEventTable certificateEventData={data.certificateEvents?.certificates ?? []} />
+	<CertificateEventTable certificateEventData={certificateEvents} />
 </section>

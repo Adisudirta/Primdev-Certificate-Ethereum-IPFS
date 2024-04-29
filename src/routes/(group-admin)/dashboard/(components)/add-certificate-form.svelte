@@ -21,9 +21,11 @@
 	import { Button, buttonVariants } from '$lib/components/ui/button';
 	import { CertificateService } from '$lib/api/services/certificate-service';
 	import type { Certificate } from '$lib/api/models/certificate';
-	import { invalidateAll } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
+	import { Trigger } from '$lib/components/ui/dialog';
 
 	let isLoading = false;
+	let isFormDialogOpen = false;
 
 	const initialValueAddCertificateForm = {
 		eventName: '',
@@ -71,94 +73,103 @@
 
 		currentCertificateData?.certificates.push(newCertificateEventData);
 		await CertificateService.updateCertificateIPFS(currentCertificateData!);
+		invalidate('app:dashboard');
+		isFormDialogOpen = false;
 		isLoading = false;
 	}
 </script>
 
-<FormDialog triggerText="Add Event" title="Add Certificate Event">
-	<form
-		on:submit={async (e) => {
-			e.preventDefault();
-			await validateForm({ update: true });
-
-			if ($allErrors.length === 0) {
-				await createCertificateEvent({
-					status: 'AVAILABLE',
-					eventName: $formData.eventName,
-					eventCode: $formData.eventCode,
-					expired: $formData.expired
-				});
-				await invalidateAll();
-				form.reset();
-			}
-		}}
-		class="flex flex-col space-y-4"
-	>
-		<Form.Field {form} name="eventName">
-			<Form.Control let:attrs>
-				<Form.Label>Event Name</Form.Label>
-				<Input {...attrs} placeholder="Input event name" bind:value={$formData.eventName} />
-			</Form.Control>
-			<Form.FieldErrors />
-		</Form.Field>
-
-		<Form.Field {form} name="eventCode">
-			<Form.Control let:attrs>
-				<Form.Label>Event Code</Form.Label>
-				<Input {...attrs} placeholder="Input event code" bind:value={$formData.eventCode} />
-			</Form.Control>
-			<Form.FieldErrors />
-		</Form.Field>
-
-		<Form.Field {form} name="expired" class="flex flex-col">
-			<Form.Control let:attrs>
-				<Form.Label>Expired</Form.Label>
-
-				<Popover.Root>
-					<Popover.Trigger
-						{...attrs}
-						class={cn(
-							buttonVariants({ variant: 'outline' }),
-							'justify-start pl-4 text-left font-normal',
-							!value && 'text-muted-foreground'
-						)}
-					>
-						{value ? df.format(value.toDate(getLocalTimeZone())) : 'Pick a date'}
-						<CalendarIcon class="ml-auto h-4 w-4 opacity-50" />
-					</Popover.Trigger>
-
-					<Popover.Content class="w-auto p-0" side="top">
-						<Calendar
-							{value}
-							bind:placeholder
-							minValue={today(getLocalTimeZone())}
-							calendarLabel="Date of birth"
-							initialFocus
-							onValueChange={(v) => {
-								if (v) {
-									$formData.expired = v.toString();
-								} else {
-									$formData.expired = '';
-								}
-							}}
-						/>
-					</Popover.Content>
-				</Popover.Root>
-
-				<Form.FieldErrors />
-				<input hidden value={$formData.expired} name={attrs.name} />
-			</Form.Control>
-		</Form.Field>
-
-		<Button
-			type="submit"
-			disabled={isLoading ||
-				$allErrors.length > 0 ||
-				$formData.eventCode === '' ||
-				$formData.eventName === ''}
-			class="w-full bg-cyan-500 transition-colors duration-300 ease-in-out hover:bg-cyan-500/65"
+<FormDialog bind:open={isFormDialogOpen} title="Add Certificate Event">
+	<div slot="trigger">
+		<Trigger
+			on:click={() => (isFormDialogOpen = true)}
+			class={buttonVariants({ variant: 'default' })}>Add Event</Trigger
 		>
-			{isLoading ? 'Loading...' : 'Add Certificate Event'}
-		</Button>
-	</form>
+	</div>
+
+	<div slot="content">
+		<form
+			on:submit={async (e) => {
+				e.preventDefault();
+				await validateForm({ update: true });
+
+				if ($allErrors.length === 0) {
+					await createCertificateEvent({
+						status: 'AVAILABLE',
+						eventName: $formData.eventName,
+						eventCode: $formData.eventCode,
+						expired: $formData.expired
+					});
+				}
+			}}
+			class="flex flex-col space-y-4"
+		>
+			<Form.Field {form} name="eventName">
+				<Form.Control let:attrs>
+					<Form.Label>Event Name</Form.Label>
+					<Input {...attrs} placeholder="Input event name" bind:value={$formData.eventName} />
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
+
+			<Form.Field {form} name="eventCode">
+				<Form.Control let:attrs>
+					<Form.Label>Event Code</Form.Label>
+					<Input {...attrs} placeholder="Input event code" bind:value={$formData.eventCode} />
+				</Form.Control>
+				<Form.FieldErrors />
+			</Form.Field>
+
+			<Form.Field {form} name="expired" class="flex flex-col">
+				<Form.Control let:attrs>
+					<Form.Label>Expired</Form.Label>
+
+					<Popover.Root>
+						<Popover.Trigger
+							{...attrs}
+							class={cn(
+								buttonVariants({ variant: 'outline' }),
+								'justify-start pl-4 text-left font-normal',
+								!value && 'text-muted-foreground'
+							)}
+						>
+							{value ? df.format(value.toDate(getLocalTimeZone())) : 'Pick a date'}
+							<CalendarIcon class="ml-auto h-4 w-4 opacity-50" />
+						</Popover.Trigger>
+
+						<Popover.Content class="w-auto p-0" side="top">
+							<Calendar
+								{value}
+								bind:placeholder
+								minValue={today(getLocalTimeZone())}
+								calendarLabel="Date of birth"
+								initialFocus
+								onValueChange={(v) => {
+									if (v) {
+										$formData.expired = v.toString();
+									} else {
+										$formData.expired = '';
+									}
+								}}
+							/>
+						</Popover.Content>
+					</Popover.Root>
+
+					<Form.FieldErrors />
+					<input hidden value={$formData.expired} name={attrs.name} />
+				</Form.Control>
+			</Form.Field>
+
+			<Button
+				type="submit"
+				disabled={isLoading ||
+					$allErrors.length > 0 ||
+					$formData.eventCode === '' ||
+					$formData.eventName === ''}
+				class="w-full bg-cyan-500 transition-colors duration-300 ease-in-out hover:bg-cyan-500/65"
+			>
+				{isLoading ? 'Loading...' : 'Add Certificate Event'}
+			</Button>
+		</form>
+	</div>
 </FormDialog>
