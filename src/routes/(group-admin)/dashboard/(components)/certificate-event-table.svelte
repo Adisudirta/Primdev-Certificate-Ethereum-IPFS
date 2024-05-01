@@ -12,6 +12,7 @@
 	import DataNotFound from './data-not-found.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 
 	$: certificateEventData = ($page.data.certificateEvents?.certificates ?? []) as
 		| Certificate[]
@@ -31,6 +32,19 @@
 	const table = createTable(certificateEventWritable, {
 		page: addPagination()
 	});
+
+	function dateValidation(date: string | undefined): string {
+		if (date) {
+			const isExpired = moment(date).isBefore(moment());
+			if (isExpired) {
+				return 'Expired';
+			} else {
+				return moment(date).format('DD MMMM YYYY');
+			}
+		} else {
+			return 'No Expired Date';
+		}
+	}
 
 	const columns = table.createColumns([
 		table.column({
@@ -54,7 +68,7 @@
 			accessor: ({ expired }) => expired,
 			header: 'Expired',
 			cell: ({ value }) => {
-				return value ? moment(value).format('DD MMMM YYYY') : 'No Expired Date';
+				return dateValidation(value);
 			}
 		}),
 		table.column({
@@ -65,7 +79,7 @@
 				return createRender(ActionButton, {
 					contentType: 'eye-icon',
 					// TODO: Will be redirect to detail page
-					handler: () => console.log('test click detail:', value)
+					handler: () => goto(`/dashboard/${value}`)
 				});
 			}
 		})
