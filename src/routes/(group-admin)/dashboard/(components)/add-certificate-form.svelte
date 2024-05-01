@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { Certificate } from '$lib/api/models/certificate';
+
 	import { zod } from 'sveltekit-superforms/adapters';
 	import { cn } from '$lib/utils/ui';
 	import { defaults, superForm } from 'sveltekit-superforms';
@@ -20,8 +22,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Button, buttonVariants } from '$lib/components/ui/button';
 	import { CertificateService } from '$lib/api/services/certificate-service';
-	import type { Certificate } from '$lib/api/models/certificate';
-	import { invalidate } from '$app/navigation';
+	import { invalidateAll } from '$app/navigation';
 	import { Trigger } from '$lib/components/ui/dialog';
 
 	let isLoading = false;
@@ -73,7 +74,7 @@
 
 		currentCertificateData?.certificates.push(newCertificateEventData);
 		await CertificateService.updateCertificateIPFS(currentCertificateData!);
-		invalidate('app:dashboard');
+		invalidateAll();
 		isFormDialogOpen = false;
 		isLoading = false;
 	}

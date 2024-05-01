@@ -11,8 +11,11 @@
 	import ActionButton from '$lib/components/action-button.svelte';
 	import DataNotFound from './data-not-found.svelte';
 	import { Button } from '$lib/components/ui/button';
+	import { page } from '$app/stores';
 
-	export let certificateEventData: Certificate[] | [];
+	$: certificateEventData = ($page.data.certificateEvents?.certificates ?? []) as
+		| Certificate[]
+		| [];
 
 	let searchValue: string;
 	const certificateEventWritable = writable<Certificate[] | []>([]);

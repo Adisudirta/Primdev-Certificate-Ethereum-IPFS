@@ -45,7 +45,6 @@
 				if (error instanceof FirebaseError) {
 					const errorMessage = error.message;
 
-					console.log(error.code);
 					switch (error.code) {
 						case 'auth/invalid-credential':
 							$errors.email = ['Invalid credential!'];

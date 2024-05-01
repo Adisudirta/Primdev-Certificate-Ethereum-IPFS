@@ -1,5 +1,5 @@
-import { CertificateService } from '$lib/api/services/certificate-service';
 import type { PageLoad } from './$types';
+import { CertificateService } from '$lib/api/services/certificate-service';
 
 export const load: PageLoad = async ({ depends }) => {
 	// Check if the latest certificate is empty, then fill it with empty array
@@ -10,7 +10,7 @@ export const load: PageLoad = async ({ depends }) => {
 		});
 	}
 	const certificateEvents = await CertificateService.getLatestUpdatedCertificateData();
-	console.log('The load function rerun!');
+
 	depends('app:dashboard');
 	return {
 		certificateEvents: certificateEvents
