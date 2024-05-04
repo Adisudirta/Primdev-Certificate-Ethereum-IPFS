@@ -9,5 +9,3 @@ export const addCertificateFormSchema = z.object({
 	}),
 	expired: z.string().optional()
 });
-
-export type addCertificateFormSchema = typeof addCertificateFormSchema;

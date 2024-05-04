@@ -1,4 +1,4 @@
-import type { Certificate, CertificateList } from '$lib/api/models/certificate';
+import type { Certificate, CertificateList, Participant } from '$lib/api/models/certificate';
 
 import { get } from 'svelte/store';
 import { IPFSRepository } from '../repositories/ipfs-repository';
@@ -88,6 +88,43 @@ export class CertificateService {
 		const newCertificateData = latestCertificateData?.certificates.map((certificate) => {
 			if (certificate.eventCode === eventCode) {
 				return { ...certificate, ...certificateData };
+			}
+
+			return certificate;
+		});
+
+		if (newCertificateData) {
+			await this.updateCertificateIPFS({ certificates: newCertificateData });
+		}
+	}
+
+	static async revokeCertificateEvent(eventCode: string): Promise<void> {
+		const latestCertificateData = await this.getLatestUpdatedCertificateData();
+
+		const newCertificateData = latestCertificateData?.certificates.map((certificate) => {
+			if (certificate.eventCode === eventCode) {
+				return { ...certificate, status: 'NOT_AVAILABLE' } as Certificate;
+			}
+
+			return certificate;
+		});
+
+		if (newCertificateData) {
+			await this.updateCertificateIPFS({ certificates: newCertificateData });
+		}
+	}
+
+	static async addParticipantToCertificateEvent(eventCode: string, participant: Participant) {
+		const latestCertificateData = await this.getLatestUpdatedCertificateData();
+
+		const newCertificateData = latestCertificateData?.certificates.map((certificate) => {
+			if (certificate.eventCode === eventCode) {
+				return {
+					...certificate,
+					participants: certificate.participants
+						? [...certificate.participants, participant]
+						: [participant]
+				} as Certificate;
 			}
 
 			return certificate;

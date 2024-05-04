@@ -6,5 +6,3 @@ export const editCertificateFormSchema = z.object({
 		.refine((eventName) => eventName.length !== 0, { message: 'Event name is required' }),
 	expired: z.string().optional()
 });
-
-export type addCertificateFormSchema = typeof editCertificateFormSchema;

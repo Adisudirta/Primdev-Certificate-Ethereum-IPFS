@@ -29,6 +29,8 @@
 	let isLoading = false;
 	let isFormDialogOpen = false;
 
+	export let disabled = false;
+
 	const initialValueAddCertificateForm = {
 		eventName: $page.data.eventName,
 		expired: $page.data.expired ?? ''
@@ -73,6 +75,7 @@
 <FormDialog bind:open={isFormDialogOpen} title="Edit Certificate Event">
 	<div slot="trigger">
 		<Trigger
+			{disabled}
 			on:click={() => (isFormDialogOpen = true)}
 			class={buttonVariants({ variant: 'secondary' })}
 		>

@@ -7,5 +7,11 @@ export interface Certificate {
 	eventName: string;
 	eventCode: string;
 	expired?: string;
-	participants?: string[];
+	participants?: Participant[];
+}
+
+export interface Participant {
+	name: string;
+	email: string;
+	phone: string;
 }

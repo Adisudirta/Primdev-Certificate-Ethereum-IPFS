@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { user } from '$lib/stores/auth';
 	import { dateValidation } from '$lib/utils/date';
 
@@ -21,6 +21,8 @@
 
 	$: !$user && goto('/login');
 
+	$: isRevoked = data.status === 'NOT_AVAILABLE';
+
 	async function handleDeleteEvent() {
 		Swal.fire({
 			title: 'Are you sure delete this event?',
@@ -39,6 +41,25 @@
 			}
 		});
 	}
+
+	async function handleRevokeEvent() {
+		Swal.fire({
+			title: 'Are you sure revoke this event?',
+			showCancelButton: true,
+			confirmButtonText: 'Revoke'
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				toast.promise(CertificateService.revokeCertificateEvent(data.eventCode!), {
+					loading: 'Revoking event...',
+					success: () => {
+						invalidateAll();
+						return 'Event revoked successfully';
+					},
+					error: 'Something went wrong! Please try again!'
+				});
+			}
+		});
+	}
 </script>
 
 <section>
@@ -48,6 +69,7 @@
 				<Breadcrumb.Item>
 					<Breadcrumb.Link
 						href="/dashboard"
+						data-sveltekit-preload-data="off"
 						class="text-gray-500 transition-colors duration-300 ease-in-out hover:text-teal-500"
 					>
 						Dashboard
@@ -100,8 +122,8 @@
 
 			<!-- Buttons -->
 			<div class="flex items-center space-x-2">
-				<EditCertificateForm />
-				<Button variant="outline">
+				<EditCertificateForm disabled={isRevoked} />
+				<Button disabled={isRevoked} variant="outline" on:click={handleRevokeEvent}>
 					<BanIcon class="mr-1" />
 					Revoke
 				</Button>
@@ -109,7 +131,7 @@
 					<Trash2Icon class="mr-1" />
 					Delete
 				</Button>
-				<Button>
+				<Button disabled={isRevoked}>
 					<CirclePlus class="mr-1" />
 					Add Participant
 				</Button>
