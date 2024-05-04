@@ -3,7 +3,7 @@
 	import { user } from '$lib/stores/auth';
 	import { dateValidation } from '$lib/utils/date';
 
-	import { FilePenLineIcon, BanIcon, Trash2Icon, CirclePlus } from 'lucide-svelte';
+	import { BanIcon, Trash2Icon, CirclePlus } from 'lucide-svelte';
 
 	import Slash from 'svelte-radix/Slash.svelte';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
@@ -14,6 +14,8 @@
 	import Swal from 'sweetalert2';
 	import { CertificateService } from '$lib/api/services/certificate-service';
 	import { cn } from '$lib/utils/ui';
+	import EditCertificateForm from './(components)/edit-certificate-form.svelte';
+	import { appLoading } from '$lib/stores/loading';
 
 	export let data;
 
@@ -61,30 +63,44 @@
 		</Breadcrumb.Root>
 
 		<div class="mb-8 flex items-center justify-between">
-			<div class="flex flex-col space-y-4">
-				<h1 class=" text-3xl font-bold text-primary">{data?.eventName}</h1>
-				<div class="flex items-center space-x-3">
-					<div
-						class={cn(
-							'rounded-lg px-2 py-1',
-							data.status === 'AVAILABLE' ? 'bg-teal-500' : 'bg-red-500'
-						)}
-					>
-						<span class="font-semibold text-white">
-							{data.status === 'AVAILABLE' ? 'Available' : 'Not Available'}
-						</span>
+			<!-- Certificate Event Data View -->
+			{#if !$appLoading}
+				<div class="flex flex-col space-y-4">
+					<h1 class=" text-3xl font-bold text-primary">{data?.eventName}</h1>
+					<div class="flex items-center space-x-3">
+						<div
+							class={cn(
+								'rounded-lg px-2 py-1',
+								data.status === 'AVAILABLE' ? 'bg-teal-500' : 'bg-red-500'
+							)}
+						>
+							<span class="font-semibold text-white">
+								{data.status === 'AVAILABLE' ? 'Available' : 'Not Available'}
+							</span>
+						</div>
+						<span class="text-gray-500">|</span>
+						<p class="font-semibold text-gray-500">
+							Expired on: {dateValidation(data.expired)}
+						</p>
 					</div>
-					<span class="text-gray-500">|</span>
-					<p class="font-semibold text-gray-500">
-						Expired on: {dateValidation(data.expired)}
-					</p>
 				</div>
-			</div>
+			{:else}
+				<div class="flex flex-col space-y-4">
+					<div class="h-[36px] w-[362px] animate-pulse rounded bg-teal-300" />
 
+					<div class="flex items-center space-x-3">
+						<div class="h-[32px] w-[82px] animate-pulse rounded-lg bg-teal-300" />
+
+						<span class="text-gray-500">|</span>
+
+						<div class="h-[24px] w-[177px] animate-pulse rounded bg-teal-300" />
+					</div>
+				</div>
+			{/if}
+
+			<!-- Buttons -->
 			<div class="flex items-center space-x-2">
-				<Button variant="secondary" on:click={() => toast.info('test sonner')}>
-					<FilePenLineIcon class="mr-1" /> Edit
-				</Button>
+				<EditCertificateForm />
 				<Button variant="outline">
 					<BanIcon class="mr-1" />
 					Revoke

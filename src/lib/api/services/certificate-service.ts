@@ -78,4 +78,23 @@ export class CertificateService {
 
 		return certificate;
 	}
+
+	static async editCertificateEvent(
+		eventCode: string,
+		certificateData: { eventName: string; expired?: string }
+	): Promise<void> {
+		const latestCertificateData = await this.getLatestUpdatedCertificateData();
+
+		const newCertificateData = latestCertificateData?.certificates.map((certificate) => {
+			if (certificate.eventCode === eventCode) {
+				return { ...certificate, ...certificateData };
+			}
+
+			return certificate;
+		});
+
+		if (newCertificateData) {
+			await this.updateCertificateIPFS({ certificates: newCertificateData });
+		}
+	}
 }

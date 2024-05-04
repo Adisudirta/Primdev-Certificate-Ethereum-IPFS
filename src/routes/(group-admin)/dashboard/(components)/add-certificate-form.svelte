@@ -85,7 +85,7 @@
 				loading: 'Creating event...',
 				success: () => {
 					invalidateAll();
-					return 'Event deleted successfully';
+					return 'Event created successfully';
 				},
 				error: 'Something went wrong! Please try again!'
 			}
