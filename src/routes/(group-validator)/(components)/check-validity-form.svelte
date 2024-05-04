@@ -22,8 +22,7 @@
 </script>
 
 <form
-	on:submit={async (e) => {
-		e.preventDefault();
+	on:submit|preventDefault={async () => {
 		await validateForm({ update: true });
 		console.log($allErrors);
 	}}

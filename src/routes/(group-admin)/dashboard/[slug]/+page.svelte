@@ -3,7 +3,7 @@
 	import { user } from '$lib/stores/auth';
 	import { dateValidation } from '$lib/utils/date';
 
-	import { BanIcon, Trash2Icon, CirclePlus } from 'lucide-svelte';
+	import { BanIcon, Trash2Icon } from 'lucide-svelte';
 
 	import Slash from 'svelte-radix/Slash.svelte';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
@@ -16,6 +16,7 @@
 	import { cn } from '$lib/utils/ui';
 	import EditCertificateForm from './(components)/edit-certificate-form.svelte';
 	import { appLoading } from '$lib/stores/loading';
+	import AddParticipantForm from './(components)/add-participant-form.svelte';
 
 	export let data;
 
@@ -131,10 +132,7 @@
 					<Trash2Icon class="mr-1" />
 					Delete
 				</Button>
-				<Button disabled={isRevoked}>
-					<CirclePlus class="mr-1" />
-					Add Participant
-				</Button>
+				<AddParticipantForm disabled={isRevoked} />
 			</div>
 		</div>
 

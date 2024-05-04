@@ -86,8 +86,7 @@
 
 	<div slot="content">
 		<form
-			on:submit={async (e) => {
-				e.preventDefault();
+			on:submit|preventDefault={async () => {
 				await validateForm({ update: true });
 
 				if ($allErrors.length === 0) {
