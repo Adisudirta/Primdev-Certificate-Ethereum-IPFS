@@ -5,6 +5,8 @@
 	import { Separator } from '$lib/components/ui/separator';
 	import AddCertificateForm from './(components)/add-certificate-form.svelte';
 	import CertificateEventTable from './(components)/certificate-event-table.svelte';
+	import { appLoading } from '$lib/stores/loading';
+	import TableLoading from '$lib/components/table-loading.svelte';
 
 	$: !$user && goto('/login');
 </script>
@@ -21,5 +23,9 @@
 
 	<Separator class="mb-5 h-[1px] w-full bg-gray-300" />
 
-	<CertificateEventTable />
+	{#if !$appLoading}
+		<CertificateEventTable />
+	{:else}
+		<TableLoading />
+	{/if}
 </section>

@@ -1,0 +1,60 @@
+<div class="flex h-[300px] w-full items-center justify-center">
+	<svg class="animate-spin" xmlns="http://www.w3.org/2000/svg" width="96" height="96" fill="none"
+		><rect width="8" height="24" x="44" y="8" fill="#1C64F2" rx="4" /><rect
+			width="8"
+			height="24"
+			x="44"
+			y="64"
+			fill="#EBF5FF"
+			rx="4"
+		/><rect
+			width="8"
+			height="24"
+			x="73.456"
+			y="16.887"
+			fill="#C3DDFD"
+			rx="4"
+			transform="rotate(45 73.456 16.887)"
+		/><rect
+			width="8"
+			height="24"
+			x="33.858"
+			y="56.485"
+			fill="#EBF5FF"
+			rx="4"
+			transform="rotate(45 33.858 56.485)"
+		/><rect
+			width="8"
+			height="24"
+			x="8"
+			y="52"
+			fill="#E1EFFE"
+			rx="4"
+			transform="rotate(-90 8 52)"
+		/><rect
+			width="8"
+			height="24"
+			x="64"
+			y="52"
+			fill="#E1EFFE"
+			rx="4"
+			transform="rotate(-90 64 52)"
+		/><rect
+			width="8"
+			height="24"
+			x="16.887"
+			y="22.544"
+			fill="#C3DDFD"
+			rx="4"
+			transform="rotate(-45 16.887 22.544)"
+		/><rect
+			width="8"
+			height="24"
+			x="56.485"
+			y="62.142"
+			fill="#EBF5FF"
+			rx="4"
+			transform="rotate(-45 56.485 62.142)"
+		/></svg
+	>
+</div>

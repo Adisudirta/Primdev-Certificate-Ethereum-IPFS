@@ -52,6 +52,7 @@
 		"svelte-radix": "^1.1.0",
 		"svelte-sonner": "^0.3.22",
 		"sveltekit-superforms": "^2.12.4",
+		"sweetalert2": "^11.10.8",
 		"tailwind-merge": "^2.2.2",
 		"tailwind-variants": "^0.2.1",
 		"zod": "^3.22.4"

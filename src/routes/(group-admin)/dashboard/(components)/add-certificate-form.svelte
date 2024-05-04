@@ -24,6 +24,7 @@
 	import { CertificateService } from '$lib/api/services/certificate-service';
 	import { invalidateAll } from '$app/navigation';
 	import { Trigger } from '$lib/components/ui/dialog';
+	import { toast } from 'svelte-sonner';
 
 	let isLoading = false;
 	let isFormDialogOpen = false;
@@ -50,33 +51,45 @@
 	let placeholder: DateValue = today(getLocalTimeZone());
 
 	async function createCertificateEvent(certificateEvent: Certificate) {
-		isLoading = true;
-		const currentCertificateData = await CertificateService.getLatestUpdatedCertificateData();
+		toast.promise(
+			async () => {
+				isLoading = true;
+				const currentCertificateData = await CertificateService.getLatestUpdatedCertificateData();
 
-		// Check if event code already exist
-		if (
-			currentCertificateData?.certificates.some(
-				(certificate) => certificate.eventCode === certificateEvent.eventCode
-			)
-		) {
-			$errors.eventCode = ['Event code already exist'];
-			isLoading = false;
-			return;
-		}
+				// Check if event code already exist
+				if (
+					currentCertificateData?.certificates.some(
+						(certificate) => certificate.eventCode === certificateEvent.eventCode
+					)
+				) {
+					$errors.eventCode = ['Event code already exist'];
+					isLoading = false;
+					throw new Error('Event code already exist');
+				}
 
-		const newCertificateEventData: Certificate = {
-			status: certificateEvent.status,
-			eventCode: certificateEvent.eventCode,
-			eventName: certificateEvent.eventName,
-			expired: certificateEvent.expired,
-			participants: []
-		};
+				const newCertificateEventData: Certificate = {
+					status: certificateEvent.status,
+					eventCode: certificateEvent.eventCode,
+					eventName: certificateEvent.eventName,
+					expired: certificateEvent.expired,
+					participants: []
+				};
 
-		currentCertificateData?.certificates.push(newCertificateEventData);
-		await CertificateService.updateCertificateIPFS(currentCertificateData!);
-		invalidateAll();
-		isFormDialogOpen = false;
-		isLoading = false;
+				currentCertificateData?.certificates.push(newCertificateEventData);
+				await CertificateService.updateCertificateIPFS(currentCertificateData!);
+				isLoading = false;
+				isFormDialogOpen = false;
+				invalidateAll();
+			},
+			{
+				loading: 'Creating event...',
+				success: () => {
+					invalidateAll();
+					return 'Event deleted successfully';
+				},
+				error: 'Something went wrong! Please try again!'
+			}
+		);
 	}
 </script>
 

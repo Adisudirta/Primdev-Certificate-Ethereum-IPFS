@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { user } from '$lib/stores/auth';
 	import { dateValidation } from '$lib/utils/date';
 
@@ -11,10 +11,32 @@
 	import { Separator } from '$lib/components/ui/separator';
 	import ParticipantTable from '../(components)/participant-table.svelte';
 	import { toast } from 'svelte-sonner';
+	import Swal from 'sweetalert2';
+	import { CertificateService } from '$lib/api/services/certificate-service';
 
 	export let data;
 
 	$: !$user && goto('/login');
+
+	async function handleDeleteEvent() {
+		Swal.fire({
+			title: 'Are you sure delete this event?',
+			showCancelButton: true,
+			confirmButtonText: 'Delete'
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				toast.promise(CertificateService.deleteCertificateEvent(data.eventCode!), {
+					loading: 'Deleting event...',
+					success: () => {
+						invalidateAll();
+						goto('dashboard');
+						return 'Event deleted successfully';
+					},
+					error: 'Something went wrong! Please try again!'
+				});
+			}
+		});
+	}
 </script>
 
 <section>
@@ -62,7 +84,7 @@
 					<BanIcon class="mr-1" />
 					Revoke
 				</Button>
-				<Button variant="destructive">
+				<Button variant="destructive" on:click={handleDeleteEvent}>
 					<Trash2Icon class="mr-1" />
 					Delete
 				</Button>
