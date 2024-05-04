@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 
 	import { Button } from '$lib/components/ui/button';
+	import { toast } from 'svelte-sonner';
 </script>
 
 <Button
@@ -15,8 +16,8 @@
 			.then(() => {
 				goto('/login');
 			})
-			.catch((error) => {
-				console.error(error);
+			.catch(() => {
+				toast.error('Something went wrong. Please try again.');
 			});
 	}}
 >

@@ -55,7 +55,7 @@
 			</div>
 
 			<div class="flex items-center space-x-2">
-				<Button variant="secondary" on:click={() => toast('test sonner')}>
+				<Button variant="secondary" on:click={() => toast.info('test sonner')}>
 					<FilePenLineIcon class="mr-1" /> Edit
 				</Button>
 				<Button variant="outline">

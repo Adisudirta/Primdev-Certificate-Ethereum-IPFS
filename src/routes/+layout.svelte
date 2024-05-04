@@ -20,7 +20,7 @@
 	});
 </script>
 
-<Toaster />
+<Toaster richColors position="top-center" />
 
 <div class="gradient-corner">
 	<MetamaskProvider>
