@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { user } from '$lib/stores/auth';
 	import { dateValidation } from '$lib/utils/date';
 
@@ -13,6 +13,7 @@
 	import { toast } from 'svelte-sonner';
 	import Swal from 'sweetalert2';
 	import { CertificateService } from '$lib/api/services/certificate-service';
+	import { cn } from '$lib/utils/ui';
 
 	export let data;
 
@@ -28,8 +29,7 @@
 				toast.promise(CertificateService.deleteCertificateEvent(data.eventCode!), {
 					loading: 'Deleting event...',
 					success: () => {
-						invalidateAll();
-						goto('dashboard');
+						goto('/dashboard', { replaceState: true, invalidateAll: true });
 						return 'Event deleted successfully';
 					},
 					error: 'Something went wrong! Please try again!'
@@ -64,14 +64,19 @@
 			<div class="flex flex-col space-y-4">
 				<h1 class=" text-3xl font-bold text-primary">{data?.eventName}</h1>
 				<div class="flex items-center space-x-3">
-					<div class="rounded-lg bg-teal-500 px-1 py-0.5">
-						<span class="text-[11px] font-semibold text-white">
-							{data?.eventCode?.toUpperCase()}
+					<div
+						class={cn(
+							'rounded-lg px-2 py-1',
+							data.status === 'AVAILABLE' ? 'bg-teal-500' : 'bg-red-500'
+						)}
+					>
+						<span class="font-semibold text-white">
+							{data.status === 'AVAILABLE' ? 'Available' : 'Not Available'}
 						</span>
 					</div>
 					<span class="text-gray-500">|</span>
 					<p class="font-semibold text-gray-500">
-						{dateValidation(data.expired)}
+						Expired on: {dateValidation(data.expired)}
 					</p>
 				</div>
 			</div>
