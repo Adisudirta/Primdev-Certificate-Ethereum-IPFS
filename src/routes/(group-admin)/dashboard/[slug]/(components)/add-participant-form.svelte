@@ -33,7 +33,7 @@
 		validationMethod: 'auto'
 	});
 
-	const { form: formData, validateForm, allErrors } = form;
+	const { form: formData, validateForm, allErrors, errors } = form;
 
 	async function createParticipant(participantData: {
 		name: string;
@@ -43,6 +43,22 @@
 		toast.promise(
 			async () => {
 				isLoading = true;
+				const currentCertificateData = await CertificateService.getLatestUpdatedCertificateData();
+				const certificateEvent = currentCertificateData?.certificates.filter(
+					(certificate) => certificate.eventCode === $page.data.eventCode
+				)[0];
+
+				// Check if email already exist
+				if (
+					certificateEvent?.participants?.some(
+						(participant) => participant.email === participantData.email
+					)
+				) {
+					$errors.email = ['Email already exist'];
+					isLoading = false;
+					throw new Error('Email already exist');
+				}
+
 				await CertificateService.addParticipantToCertificateEvent(
 					$page.data.eventCode,
 					participantData

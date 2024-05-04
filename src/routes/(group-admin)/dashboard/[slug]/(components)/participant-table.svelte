@@ -2,13 +2,18 @@
 	import type { Participant } from '$lib/api/models/certificate';
 
 	import { writable } from 'svelte/store';
-	import { createTable, Render, Subscribe } from 'svelte-headless-table';
+	import { createRender, createTable, Render, Subscribe } from 'svelte-headless-table';
 	import { page } from '$app/stores';
 	import { addPagination } from 'svelte-headless-table/plugins';
 
 	import * as Table from '$lib/components/ui/table';
 	import { Button } from '$lib/components/ui/button';
 	import DataNotFound from '../../(components)/data-not-found.svelte';
+	import ActionButton from '$lib/components/action-button.svelte';
+	import { invalidateAll } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
+	import { CertificateService } from '$lib/api/services/certificate-service';
+	import Swal from 'sweetalert2';
 
 	const participantsWritable = writable<Participant[] | []>([]);
 	$: participantData = ($page.data.participants ?? []) as Participant[] | [];
@@ -17,6 +22,34 @@
 	const table = createTable(participantsWritable, {
 		page: addPagination()
 	});
+
+	async function handleDeleteParticipant(email: string) {
+		Swal.fire({
+			title: 'Are you sure delete this participant?',
+			showCancelButton: true,
+			confirmButtonText: 'Delete'
+		}).then(async (result) => {
+			if (result.isConfirmed) {
+				toast.promise(
+					async () => {
+						await CertificateService.deleteParticipantFromCertificateEvent(
+							$page.data.eventCode,
+							email
+						);
+						invalidateAll();
+					},
+					{
+						loading: 'Deleting participant...',
+						success: () => {
+							invalidateAll();
+							return 'Participant deleted successfully';
+						},
+						error: 'Something went wrong! Please try again!'
+					}
+				);
+			}
+		});
+	}
 
 	const columns = table.createColumns([
 		table.column({
@@ -33,6 +66,17 @@
 			id: 'phone',
 			accessor: 'phone',
 			header: 'Phone'
+		}),
+		table.column({
+			id: 'action',
+			accessor: ({ email }) => email,
+			header: 'Action',
+			cell: ({ value }) => {
+				return createRender(ActionButton, {
+					contentType: 'trash-icon',
+					handler: () => handleDeleteParticipant(value)
+				});
+			}
 		})
 	]);
 

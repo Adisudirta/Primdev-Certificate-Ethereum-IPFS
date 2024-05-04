@@ -134,4 +134,27 @@ export class CertificateService {
 			await this.updateCertificateIPFS({ certificates: newCertificateData });
 		}
 	}
+
+	static async deleteParticipantFromCertificateEvent(eventCode: string, email: string) {
+		const latestCertificateData = await this.getLatestUpdatedCertificateData();
+		const filteredCertificateData = latestCertificateData?.certificates.filter(
+			(certificate) => certificate.eventCode === eventCode
+		)[0];
+
+		const newParticipantData = filteredCertificateData?.participants?.filter(
+			(participant) => participant.email !== email
+		);
+
+		const updatedAllCertificateData = latestCertificateData?.certificates.map((certificate) => {
+			if (certificate.eventCode === eventCode) {
+				return { ...certificate, participants: newParticipantData ?? [] } as Certificate;
+			}
+
+			return certificate;
+		});
+
+		if (updatedAllCertificateData) {
+			await this.updateCertificateIPFS({ certificates: updatedAllCertificateData });
+		}
+	}
 }

@@ -65,7 +65,6 @@
 			cell: ({ value }) => {
 				return createRender(ActionButton, {
 					contentType: 'eye-icon',
-					// TODO: Will be redirect to detail page
 					handler: () => goto(`/dashboard/${value}`)
 				});
 			}
