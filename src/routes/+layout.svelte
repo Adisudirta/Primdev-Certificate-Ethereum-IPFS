@@ -8,6 +8,7 @@
 
 	import '../app.pcss';
 	import Footer from '$lib/components/footer.svelte';
+	import { Toaster } from 'svelte-sonner';
 
 	initializeApp(firebaseConfig);
 	const auth = getAuth();
@@ -18,6 +19,8 @@
 		}
 	});
 </script>
+
+<Toaster />
 
 <div class="gradient-corner">
 	<MetamaskProvider>

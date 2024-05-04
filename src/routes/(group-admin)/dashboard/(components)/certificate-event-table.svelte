@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Certificate } from '$lib/api/models/certificate';
 
-	import moment from 'moment';
+	import { dateValidation } from '$lib/utils/date';
 	import { writable } from 'svelte/store';
 
 	import * as Table from '$lib/components/ui/table';
@@ -32,19 +32,6 @@
 	const table = createTable(certificateEventWritable, {
 		page: addPagination()
 	});
-
-	function dateValidation(date: string | undefined): string {
-		if (date) {
-			const isExpired = moment(date).isBefore(moment());
-			if (isExpired) {
-				return 'Expired';
-			} else {
-				return moment(date).format('DD MMMM YYYY');
-			}
-		} else {
-			return 'No Expired Date';
-		}
-	}
 
 	const columns = table.createColumns([
 		table.column({

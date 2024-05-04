@@ -1,11 +1,12 @@
+import type { Certificate, CertificateList } from '$lib/api/models/certificate';
+
+import { get } from 'svelte/store';
 import { IPFSRepository } from '../repositories/ipfs-repository';
 import { certificateMetadata } from '$lib/constants/certificate';
-import type { CertificateList } from '$lib/api/models/certificate';
 import { latestCertificateCID } from '$lib/stores/certificate';
-import { get } from 'svelte/store';
 
 export class CertificateService {
-	static async updateCertificateIPFS(content: CertificateList) {
+	static async updateCertificateIPFS(content: CertificateList): Promise<void> {
 		const listFiles = await IPFSRepository.listFiles();
 		const certificates = listFiles.rows.filter(
 			(file) =>
@@ -56,7 +57,7 @@ export class CertificateService {
 		return res;
 	}
 
-	static async deleteCertificateEvent(eventCode: string) {
+	static async deleteCertificateEvent(eventCode: string): Promise<void> {
 		const latestCertificateData = await this.getLatestUpdatedCertificateData();
 
 		const newCertificateData = latestCertificateData?.certificates.filter(
@@ -66,5 +67,15 @@ export class CertificateService {
 		if (newCertificateData) {
 			await this.updateCertificateIPFS({ certificates: newCertificateData });
 		}
+	}
+
+	static async getDetailCertificateEvents(eventCode: string): Promise<Certificate | undefined> {
+		const latestCertificateData = await this.getLatestUpdatedCertificateData();
+
+		const certificate = latestCertificateData?.certificates.find(
+			(certificate) => certificate.eventCode === eventCode
+		);
+
+		return certificate;
 	}
 }
