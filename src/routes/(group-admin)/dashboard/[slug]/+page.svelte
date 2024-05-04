@@ -1,7 +1,11 @@
 <script lang="ts">
+	import { cn } from '$lib/utils/ui';
 	import { goto, invalidateAll } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
 	import { user } from '$lib/stores/auth';
 	import { dateValidation } from '$lib/utils/date';
+	import { appLoading } from '$lib/stores/loading';
+	import Swal from 'sweetalert2';
 
 	import { BanIcon, Trash2Icon } from 'lucide-svelte';
 
@@ -9,14 +13,11 @@
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/index.js';
 	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
-	import ParticipantTable from '../(components)/participant-table.svelte';
-	import { toast } from 'svelte-sonner';
-	import Swal from 'sweetalert2';
+	import ParticipantTable from './(components)/participant-table.svelte';
 	import { CertificateService } from '$lib/api/services/certificate-service';
-	import { cn } from '$lib/utils/ui';
 	import EditCertificateForm from './(components)/edit-certificate-form.svelte';
-	import { appLoading } from '$lib/stores/loading';
 	import AddParticipantForm from './(components)/add-participant-form.svelte';
+	import TableLoading from '$lib/components/table-loading.svelte';
 
 	export let data;
 
@@ -138,6 +139,10 @@
 
 		<Separator class="mb-5 h-[1px] w-full bg-gray-300" />
 
-		<ParticipantTable />
+		{#if !$appLoading}
+			<ParticipantTable />
+		{:else}
+			<TableLoading />
+		{/if}
 	</div>
 </section>

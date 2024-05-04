@@ -1,5 +1,7 @@
 <script lang="ts">
 	import noData from '$lib/assets/no-data.svg';
+
+	export let message: string = "Event doesn't exist";
 </script>
 
 <div class="flex h-[500px] w-full flex-col items-center justify-center space-y-3">
@@ -7,6 +9,6 @@
 
 	<div class="text-center">
 		<h1 class="mb-1 text-3xl font-bold text-primary">Data Not Found</h1>
-		<p class="mb-4 text-gray-500">Event doesn't exist</p>
+		<p class="mb-4 text-gray-500">{message}</p>
 	</div>
 </div>
