@@ -14,9 +14,7 @@
 	const auth = getAuth();
 
 	onAuthStateChanged(auth, (userData) => {
-		if (userData) {
-			user.set(userData);
-		}
+		user.set(userData);
 	});
 </script>
 
