@@ -97,8 +97,10 @@
 	<div slot="trigger">
 		<Trigger
 			on:click={() => (isFormDialogOpen = true)}
-			class={buttonVariants({ variant: 'default' })}>Add Event</Trigger
+			class={buttonVariants({ variant: 'default' })}
 		>
+			Add Event
+		</Trigger>
 	</div>
 
 	<div slot="content">
