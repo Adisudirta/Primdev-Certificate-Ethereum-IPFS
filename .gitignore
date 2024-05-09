@@ -11,5 +11,10 @@ node_modules
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
+# Hardhat files
+cache
+artifacts
+src/contract-types
+
 # firebase config
 config.firebase.ts
