@@ -1,5 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+/* eslint-disable @typescript-eslint/no-var-requires */
 const hre = require('hardhat');
+const BigNumber = require('bignumber.js');
 
 async function main() {
 	const [deployer] = await hre.ethers.getSigners();
@@ -9,7 +10,7 @@ async function main() {
 	const startingBalance = await deployer.provider.getBalance(deployer.address);
 	console.log(
 		'Account starting balance:',
-		hre.ethers.formatEther(startingBalance).toString() + ' ETH'
+		new BigNumber(hre.ethers.formatEther(startingBalance)).toString() + ' ETH'
 	);
 
 	// We get the contract to deploy
@@ -24,7 +25,7 @@ async function main() {
 	const endingBalance = await deployer.provider.getBalance(deployer.address);
 	console.log(
 		'\nAccount ending balance:',
-		hre.ethers.formatEther(endingBalance).toString() + ' ETH'
+		new BigNumber(hre.ethers.formatEther(endingBalance)).toString() + ' ETH'
 	);
 	console.log('End Deploy------------------------------------------');
 }
