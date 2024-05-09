@@ -65,10 +65,6 @@
 	<div class="flex flex-col items-center justify-center gap-5">
 		<img src={logoPrimdev} class="w-[300px] object-contain" alt="Primakara Developer Logo" />
 
-		<h1 class="text-center text-2xl font-bold text-blue-500">
-			Wellcome Primakara Developer Admin!
-		</h1>
-
 		<div class="w-[500px]">
 			<form
 				on:submit|preventDefault={async () => {

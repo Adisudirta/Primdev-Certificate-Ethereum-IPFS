@@ -9,6 +9,7 @@
 	import '../app.pcss';
 	import Footer from '$lib/components/footer.svelte';
 	import { Toaster } from 'svelte-sonner';
+	import { page } from '$app/stores';
 
 	initializeApp(firebaseConfig);
 	const auth = getAuth();
@@ -16,7 +17,18 @@
 	onAuthStateChanged(auth, (userData) => {
 		user.set(userData);
 	});
+
+	$: generateTitle = () => {
+		const pathname = $page.url.pathname.replace('/', '').split('/')[0];
+		const title = pathname === '' ? 'Validator' : pathname[0].toUpperCase() + pathname.slice(1);
+
+		return title;
+	};
 </script>
+
+<svelte:head>
+	<title>{`${generateTitle()} | Primakara Developers`}</title>
+</svelte:head>
 
 <Toaster richColors position="top-center" />
 
