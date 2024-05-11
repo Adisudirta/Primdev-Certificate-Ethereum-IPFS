@@ -15,13 +15,13 @@
 	$: isDialogOpen = !$walletState.account;
 </script>
 
-<Dialog.Root open={isDialogOpen}>
-	<Dialog.Content class="h-[500px] w-[425px]">
+<Dialog.Root open={isDialogOpen} closeOnOutsideClick={false} closeOnEscape={false}>
+	<Dialog.Content withCloseButton={false} class="h-[500px] w-[425px]">
 		{#if $loaded}
 			{#if !$isMetaMaskPresent}
 				<div class="flex h-full w-full flex-col items-center justify-center space-y-5">
 					<img
-						class="w-[200px] animate-pulse object-contain object-center"
+						class="w-[200px] object-contain object-center"
 						src={metamaskLogo}
 						alt="Metamask Logo"
 					/>
@@ -46,17 +46,17 @@
 			{:else}
 				<div class="flex h-full w-full flex-col items-center justify-center space-y-5">
 					<img
-						class="w-[200px] animate-pulse object-contain object-center"
+						class="w-[200px] object-contain object-center"
 						src={metamaskLogo}
 						alt="Metamask Logo"
 					/>
 
 					<div>
 						<h1 class="text-center text-xl font-bold text-primary">
-							Looks like you doesn't have Metamask installed
+							Looks like you doesn't have connect Metamask
 						</h1>
 						<p class="text-center text-lg text-gray-500">
-							Sorry about that! Please install Metamask and you can come back here.
+							Sorry about that! Please connect Metamask and you can come back here.
 						</p>
 					</div>
 

@@ -1,5 +1,10 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/ui.js';
+	import { page } from '$app/stores';
+	import { toast } from 'svelte-sonner';
+	import { BlockchainService } from '$lib/api/services/blockchain-service';
+	import { CertificateService } from '$lib/api/services/certificate-service';
+	import { invalidateAll } from '$app/navigation';
 
 	import { ShieldCheckIcon, ShieldXIcon } from 'lucide-svelte';
 
@@ -8,7 +13,33 @@
 	import { Button, buttonVariants } from './ui/button';
 
 	let isSynchronizing = false;
-	let isSynchronized = false;
+
+	$: currentCIDOnBlockchain = $page.data.currentCIDOnBlockchain as string | undefined;
+	$: currentCID = $page.data.currentCID as string | null;
+
+	$: isSynchronized = currentCID === currentCIDOnBlockchain;
+
+	$: console.log('currentCIDOnBlockchain', currentCIDOnBlockchain);
+	$: console.log('currentCID', currentCID);
+
+	async function synchronizeBlockchain() {
+		toast.promise(
+			async () => {
+				isSynchronizing = true;
+				const currentCIDOnIPFS = await CertificateService.getLatestCertificateCID();
+				await BlockchainService.setCurrentCIDToBlockchain(currentCIDOnIPFS!);
+				isSynchronizing = false;
+			},
+			{
+				loading: 'Synchronizing IPFS to blockchain...',
+				success: () => {
+					invalidateAll();
+					return 'Synchronizing successfully';
+				},
+				error: 'Something went wrong! Please try again!'
+			}
+		);
+	}
 </script>
 
 <Dialog.Root>
@@ -16,6 +47,8 @@
 		{#if isSynchronized}
 			<ShieldCheckIcon class="mr-2" />
 			Blockchain Synchronized
+		{:else if isSynchronizing}
+			Synchronizing Blockchain...
 		{:else}
 			<ShieldXIcon class="mr-2" />
 			Blockchain Not Synchronized
@@ -31,11 +64,36 @@
 			/>
 
 			<div class="inline-flex flex-col space-x-2">
-				<h1 class="text-center text-2xl font-bold text-primary">Synchronize IPFS to Blockchain</h1>
-				<p class="text-center">Synchronize current data on IPFS to the Ethereum blockchain.</p>
+				<h1
+					class={cn(
+						'text-center text-2xl font-bold',
+						isSynchronized ? 'text-primary' : 'text-red-500'
+					)}
+				>
+					{#if isSynchronizing}
+						Synchronizing IPFS to Blockchain...
+					{:else if isSynchronized}
+						Blockchain Synchronized
+					{:else}
+						IPFS Not Synchronized
+					{/if}
+				</h1>
+				<p class="text-center">
+					{#if isSynchronizing}
+						Please wait while we synchronize your IPFS data to the blockchain.
+					{:else if isSynchronized}
+						Your IPFS data is synchronized to the blockchain.
+					{:else}
+						Your IPFS data is not synchronized to the blockchain.
+					{/if}
+				</p>
 			</div>
 
-			<Button class="w-full" disabled={isSynchronized}>
+			<Button
+				on:click={synchronizeBlockchain}
+				disabled={isSynchronized || isSynchronizing}
+				class="w-full"
+			>
 				{#if isSynchronizing}
 					Synchronizing...
 				{:else if isSynchronized}

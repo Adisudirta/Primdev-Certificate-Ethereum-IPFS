@@ -1,14 +1,17 @@
 <script lang="ts">
 	import { user } from '$lib/stores/auth';
 	import { goto } from '$app/navigation';
+	import { browser } from '$app/environment';
+	import { appLoading } from '$lib/stores/loading';
 
 	import { Separator } from '$lib/components/ui/separator';
 	import AddCertificateForm from './(components)/add-certificate-form.svelte';
 	import CertificateEventTable from './(components)/certificate-event-table.svelte';
-	import { appLoading } from '$lib/stores/loading';
 	import TableLoading from '$lib/components/table-loading.svelte';
 
-	$: !$user && goto('/login');
+	$: if (browser) {
+		!$user && goto('/login');
+	}
 </script>
 
 <section class="container">

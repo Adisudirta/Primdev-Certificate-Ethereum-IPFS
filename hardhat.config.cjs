@@ -3,10 +3,10 @@ require('@nomicfoundation/hardhat-toolbox');
 module.exports = {
 	solidity: '0.8.4',
 	paths: {
-		sources: './smart-contract/contracts',
-		tests: './smart-contract/test',
-		cache: './smart-contract/cache',
-		artifacts: './smart-contract/artifacts'
+		sources: './src/lib/smart-contract/contracts',
+		tests: './src/lib/smart-contract/test',
+		cache: './src/lib/smart-contract/cache',
+		artifacts: './src/lib/smart-contract/artifacts'
 	},
 	networks: {
 		hardhat: {
