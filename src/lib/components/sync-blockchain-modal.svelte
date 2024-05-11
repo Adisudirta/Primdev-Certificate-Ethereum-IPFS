@@ -19,9 +19,6 @@
 
 	$: isSynchronized = currentCID === currentCIDOnBlockchain;
 
-	$: console.log('currentCIDOnBlockchain', currentCIDOnBlockchain);
-	$: console.log('currentCID', currentCID);
-
 	async function synchronizeBlockchain() {
 		toast.promise(
 			async () => {
