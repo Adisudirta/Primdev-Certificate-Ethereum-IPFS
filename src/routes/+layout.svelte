@@ -4,12 +4,11 @@
 	import { initializeApp } from 'firebase/app';
 	import { firebaseConfig } from '../config.firebase';
 
-	import MetamaskProvider from '$lib/components/metamask-provider.svelte';
-
 	import '../app.pcss';
 	import Footer from '$lib/components/footer.svelte';
 	import { Toaster } from 'svelte-sonner';
 	import { page } from '$app/stores';
+	import Metamask from '$lib/components/metamask.svelte';
 
 	initializeApp(firebaseConfig);
 	const auth = getAuth();
@@ -31,15 +30,14 @@
 </svelte:head>
 
 <Toaster richColors position="top-center" />
+<Metamask />
 
 <div class="gradient-corner">
-	<MetamaskProvider>
-		<div class="min-h-[calc(100vh-40px)] w-full">
-			<slot />
-		</div>
+	<div class="min-h-[calc(100vh-40px)] w-full">
+		<slot />
+	</div>
 
-		<Footer />
-	</MetamaskProvider>
+	<Footer />
 </div>
 
 <style scoped>

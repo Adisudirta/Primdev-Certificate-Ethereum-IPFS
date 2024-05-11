@@ -3,9 +3,9 @@
 
 	import { ShieldCheckIcon, ShieldXIcon } from 'lucide-svelte';
 
+	import globeIllustration from '../assets/globe.png';
 	import * as Dialog from './ui/dialog/index.js';
 	import { Button, buttonVariants } from './ui/button';
-	import GlobeIllustration from '../assets/globe.png';
 
 	let isSynchronizing = false;
 	let isSynchronized = false;
@@ -25,7 +25,7 @@
 	<Dialog.Content class="sm:max-w-[425px]">
 		<div class="flex flex-col items-center justify-center space-y-5">
 			<img
-				src={GlobeIllustration}
+				src={globeIllustration}
 				alt="Globe Illustration"
 				class={cn('w-[500px] object-contain object-center', isSynchronizing && 'animate-pulse')}
 			/>
