@@ -5,6 +5,7 @@
 	import { BlockchainService } from '$lib/api/services/blockchain-service';
 	import { CertificateService } from '$lib/api/services/certificate-service';
 	import { invalidateAll } from '$app/navigation';
+	import { latestCertificateCID } from '$lib/stores/certificate';
 
 	import { ShieldCheckIcon, ShieldXIcon } from 'lucide-svelte';
 
@@ -15,7 +16,7 @@
 	let isSynchronizing = false;
 
 	$: currentCIDOnBlockchain = $page.data.currentCIDOnBlockchain as string | undefined;
-	$: currentCID = $page.data.currentCID as string | null;
+	$: currentCID = $latestCertificateCID ?? ($page.data.currentCID as string | null);
 
 	$: isSynchronized = currentCID === currentCIDOnBlockchain;
 

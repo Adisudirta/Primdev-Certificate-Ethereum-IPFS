@@ -8,6 +8,7 @@
 	import AddCertificateForm from './(components)/add-certificate-form.svelte';
 	import CertificateEventTable from './(components)/certificate-event-table.svelte';
 	import TableLoading from '$lib/components/table-loading.svelte';
+	import SyncBlockchainModal from '$lib/components/sync-blockchain-modal.svelte';
 
 	$: if (browser) {
 		!$user && goto('/login');
@@ -20,7 +21,8 @@
 		Wellcome Primakara Developer Admin, now you can add & manage certificate here.
 	</p>
 
-	<div class="mb-4 mt-10 flex justify-end">
+	<div class="mb-4 mt-10 flex items-center justify-end space-x-4">
+		<SyncBlockchainModal />
 		<AddCertificateForm />
 	</div>
 

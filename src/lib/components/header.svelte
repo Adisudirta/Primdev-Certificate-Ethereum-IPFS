@@ -9,7 +9,6 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import LogoutButton from './logout-button.svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import SyncBlockchainModal from './sync-blockchain-modal.svelte';
 
 	export let type: 'default' | 'validator' = 'default';
 
@@ -35,36 +34,32 @@
 		{/if}
 
 		{#if type === 'default'}
-			<div class="flex items-center space-x-4">
-				<SyncBlockchainModal />
-
-				<DropdownMenu.Root>
-					<DropdownMenu.Trigger>
-						<div class="flex items-center space-x-2">
-							<div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500">
-								<CircleUserRound class="text-white" />
-							</div>
-
-							{#if $user}
-								<span class="text-lg text-primary">{$user.email}</span>
-							{:else}
-								<span class="text-lg text-primary">Loading...</span>
-							{/if}
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger>
+					<div class="flex items-center space-x-2">
+						<div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500">
+							<CircleUserRound class="text-white" />
 						</div>
-					</DropdownMenu.Trigger>
 
-					<DropdownMenu.Content align="end">
-						<DropdownMenu.Group>
-							<DropdownMenu.Label>My Account</DropdownMenu.Label>
-							<DropdownMenu.Separator />
+						{#if $user}
+							<span class="text-lg text-primary">{$user.email}</span>
+						{:else}
+							<span class="text-lg text-primary">Loading...</span>
+						{/if}
+					</div>
+				</DropdownMenu.Trigger>
 
-							<div class="px-1 py-3">
-								<LogoutButton />
-							</div>
-						</DropdownMenu.Group>
-					</DropdownMenu.Content>
-				</DropdownMenu.Root>
-			</div>
+				<DropdownMenu.Content align="end">
+					<DropdownMenu.Group>
+						<DropdownMenu.Label>My Account</DropdownMenu.Label>
+						<DropdownMenu.Separator />
+
+						<div class="px-1 py-3">
+							<LogoutButton />
+						</div>
+					</DropdownMenu.Group>
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
 		{/if}
 	</div>
 </header>
