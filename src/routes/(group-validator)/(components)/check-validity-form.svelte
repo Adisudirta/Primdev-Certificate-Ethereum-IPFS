@@ -6,6 +6,8 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
+	import { CertificateService } from '$lib/api/services/certificate-service';
+	import Swal from 'sweetalert2';
 
 	const initialValueCheckValidityForm = {
 		code: '',
@@ -24,7 +26,23 @@
 <form
 	on:submit|preventDefault={async () => {
 		await validateForm({ update: true });
-		console.log($allErrors);
+
+		if ($allErrors.length === 0) {
+			const res = await CertificateService.validateCertificate($formData);
+
+			if (res) {
+				Swal.fire({
+					icon: 'success',
+					title: 'Certificate Valid!'
+				});
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'Certificate Not Valid!',
+					text: 'Invalid certificate code or full name!'
+				});
+			}
+		}
 	}}
 	class="flex flex-col space-y-4"
 >

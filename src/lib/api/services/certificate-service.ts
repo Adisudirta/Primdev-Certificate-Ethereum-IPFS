@@ -1,11 +1,49 @@
 import type { Certificate, CertificateList, Participant } from '$lib/api/models/certificate';
 
 import { get } from 'svelte/store';
+import { page } from '$app/stores';
 import { IPFSRepository } from '../repositories/ipfs-repository';
 import { certificateMetadata } from '$lib/constants/certificate';
 import { latestCertificateCID } from '$lib/stores/certificate';
+import { toast } from 'svelte-sonner';
 
 export class CertificateService {
+	static async validateCertificate(data: { code: string; fullName: string }): Promise<boolean> {
+		const cidOnBlockChain = get(page).data.currentCIDOnBlockchain;
+
+		if (!cidOnBlockChain) {
+			toast.error('No certificate found on blockchain. Please try again later.');
+			return false;
+		}
+
+		const res = await IPFSRepository.retrieveJSONFromIPFS<CertificateList>(cidOnBlockChain);
+
+		const certificateEvent = res.certificates.find(
+			(certificate) => certificate.eventCode === data.code
+		);
+
+		if (!certificateEvent) {
+			toast.error('Invalid certificate code');
+			return false;
+		}
+
+		if (certificateEvent.participants && certificateEvent.participants?.length === 0) {
+			toast.error('No participants found');
+			return false;
+		} else {
+			const participant = certificateEvent.participants!.find(
+				(participant) => participant.name === data.fullName
+			);
+
+			if (!participant) {
+				toast.error('Invalid name');
+				return false;
+			}
+
+			return true;
+		}
+	}
+
 	static async updateCertificateIPFS(content: CertificateList): Promise<void> {
 		const listFiles = await IPFSRepository.listFiles();
 		const certificates = listFiles.rows.filter(
