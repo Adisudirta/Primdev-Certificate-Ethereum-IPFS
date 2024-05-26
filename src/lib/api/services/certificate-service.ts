@@ -9,14 +9,14 @@ import { toast } from 'svelte-sonner';
 
 export class CertificateService {
 	static async validateCertificate(data: { code: string; fullName: string }): Promise<boolean> {
-		const cidOnBlockChain = get(page).data.currentCIDOnBlockchain;
+		const cid = get(page).data.currentCID;
 
-		if (!cidOnBlockChain) {
+		if (!cid) {
 			toast.error('No certificate found on blockchain. Please try again later.');
 			return false;
 		}
 
-		const res = await IPFSRepository.retrieveJSONFromIPFS<CertificateList>(cidOnBlockChain);
+		const res = await IPFSRepository.retrieveJSONFromIPFS<CertificateList>(cid);
 
 		const certificateEvent = res.certificates.find(
 			(certificate) => certificate.eventCode === data.code

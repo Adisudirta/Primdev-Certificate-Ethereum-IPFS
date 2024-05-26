@@ -2,6 +2,9 @@
 	import { zod } from 'sveltekit-superforms/adapters';
 	import { superForm, defaults } from 'sveltekit-superforms';
 	import { checkValidityFormSchema } from '../(form-schemas)/check-validity-form-schema';
+	import { page } from '$app/stores';
+	import { latestCertificateCID } from '$lib/stores/certificate';
+	import { ethers, toUtf8Bytes } from 'ethers';
 
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
@@ -21,13 +24,18 @@
 	});
 
 	const { form: formData, validateForm, allErrors } = form;
+
+	$: currentCIDOnBlockchain = $page.data.currentCIDOnBlockchain as string | undefined;
+	$: currentCID = $latestCertificateCID ?? ($page.data.currentCID as string | null);
+
+	$: isSynchronized = ethers.keccak256(toUtf8Bytes(currentCID!)) === currentCIDOnBlockchain;
 </script>
 
 <form
 	on:submit|preventDefault={async () => {
 		await validateForm({ update: true });
 
-		if ($allErrors.length === 0) {
+		if (isSynchronized && $allErrors.length === 0) {
 			const res = await CertificateService.validateCertificate($formData);
 
 			if (res) {
@@ -42,6 +50,12 @@
 					text: 'Invalid certificate code or full name!'
 				});
 			}
+		} else if (!isSynchronized) {
+			Swal.fire({
+				icon: 'warning',
+				title: 'Blockchain Not Synchronized!',
+				text: 'Please contact the administrator to synchronize the blockchain!'
+			});
 		}
 	}}
 	class="flex flex-col space-y-4"

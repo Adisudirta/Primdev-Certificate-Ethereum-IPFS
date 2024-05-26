@@ -12,19 +12,21 @@
 	import globeIllustration from '../assets/globe.png';
 	import * as Dialog from './ui/dialog/index.js';
 	import { Button, buttonVariants } from './ui/button';
+	import { ethers, toUtf8Bytes } from 'ethers';
 
 	let isSynchronizing = false;
 
 	$: currentCIDOnBlockchain = $page.data.currentCIDOnBlockchain as string | undefined;
 	$: currentCID = $latestCertificateCID ?? ($page.data.currentCID as string | null);
 
-	$: isSynchronized = currentCID === currentCIDOnBlockchain;
+	$: isSynchronized = ethers.keccak256(toUtf8Bytes(currentCID!)) === currentCIDOnBlockchain;
 
 	async function synchronizeBlockchain() {
 		toast.promise(
 			async () => {
 				isSynchronizing = true;
 				const currentCIDOnIPFS = await CertificateService.getLatestCertificateCID();
+
 				await BlockchainService.setCurrentCIDToBlockchain(currentCIDOnIPFS!);
 				isSynchronizing = false;
 			},

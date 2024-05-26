@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { ethers, toUtf8Bytes } from 'ethers';
 import CertificateManager from '$lib/smart-contract/artifacts/src/lib/smart-contract/contracts/CertificateManager.sol/CertificateManager.json';
 import { toast } from 'svelte-sonner';
 
@@ -25,7 +25,9 @@ export class BlockchainService {
 				signer
 			);
 
-			await certificateManager.setCurrentCID(cid);
+			const hashedCID = ethers.keccak256(toUtf8Bytes(cid));
+
+			await certificateManager.setCurrentCID(hashedCID);
 		} catch {
 			toast.error('Error while setting the CID');
 		}
